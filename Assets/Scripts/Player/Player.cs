@@ -6,12 +6,12 @@ public class Player : MonoBehaviour {
 
     public float Speed = 0.1f;
     private Animator animator = null;
-    private Rigidbody2D rigidbody = null;
+    private Rigidbody rigidbody = null;
 
     // Use this for initialization
     void Start () {
         animator = GetComponent<Animator>();
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody>();
 	}
 	
 	// Update is called once per frame
@@ -21,34 +21,36 @@ public class Player : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        var position = transform.position;
+        float xmove = 0f, ymove = 0f;
 
         bool walking = false;
         if (Input.GetKey(KeyCode.A))
         {
-            position.x -= Speed;
+            xmove -= Speed;
             walking = true;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            position.x += Speed;
+            xmove += Speed;
             walking = true;
         }
         if (Input.GetKey(KeyCode.W))
         {
-            position.y += Speed;
+            ymove += Speed;
             walking = true;
         }
         if (Input.GetKey(KeyCode.S))
         {
-            position.y -= Speed;
+            ymove -= Speed;
             walking = true;
         }
 
         if (walking == true)
         {
+            Vector3 movementVector = transform.position + ((new Vector3(xmove, ymove)).normalized * Speed);
+
             animator.SetTrigger("playerWalk");
-            rigidbody.MovePosition(position);            
+            rigidbody.MovePosition(movementVector);
         } else
         {
             animator.SetTrigger("playerStopWalk");
